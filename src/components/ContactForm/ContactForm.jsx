@@ -1,32 +1,49 @@
+import { useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { nanoid } from "nanoid";
 
 import styles from "../ContactForm/ContactForm.module.css";
-
 
 const phoneRegExp = /^(\+380|0)\d{9}$/;
 
 const ContactFormSchema = Yup.object().shape({
   username: Yup.string()
-    .min(3, "Too Short! Min 3 simbols.")
+    .min(3, "Too Short! Min 3 symbols.")
     .max(50, "Too Long!")
     .required("Required"),
   phoneNum: Yup.string()
     .matches(
       phoneRegExp,
-      "Invalid phone number. Must be a valid Ukrainian number")
+      "Invalid phone number. Must be a valid Ukrainian number"
+    )
     .required("Phone number is required"),
 });
 
 const ContactForm = () => {
+  // Використання useState для зберігання контактів
+  const [contacts, setContacts] = useState([]);
+
   const initialValues = {
     username: "",
     phoneNum: "",
   };
 
+  // Функція для додавання контакту
   const handleSubmit = (values, options) => {
-    console.log(values);
+    const newContact = { ...values, id: nanoid() };
+
+    // Оновлюємо стан
+    setContacts([...contacts, newContact]);
+
+    // Скидаємо форму після додавання контакту
     options.resetForm();
+  };
+
+  // Функція для видалення контакту
+  const handleDelete = (id) => {
+    const updatedContacts = contacts.filter((contact) => contact.id !== id);
+    setContacts(updatedContacts);
   };
 
   return (
@@ -46,7 +63,7 @@ const ContactForm = () => {
             />
             <ErrorMessage
               name="username"
-              component='p'
+              component="p"
               className={styles.error}
             />
           </label>
@@ -61,13 +78,23 @@ const ContactForm = () => {
             />
             <ErrorMessage
               name="phoneNum"
-              component='p'
+              component="p"
               className={styles.error}
-             />
+            />
           </label>
           <button type="submit">Add Contact</button>
         </Form>
       </Formik>
+
+      {/* Відображення списку контактів */}
+      <ul>
+        {contacts.map((contact) => (
+          <li key={contact.id}>
+            {contact.username}: {contact.phoneNum}
+            <button onClick={() => handleDelete(contact.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
