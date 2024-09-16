@@ -1,8 +1,6 @@
-import { useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { nanoid } from "nanoid";
-
 import styles from "../ContactForm/ContactForm.module.css";
 
 const phoneRegExp = /^(\+380|0)\d{9}$/;
@@ -20,33 +18,19 @@ const ContactFormSchema = Yup.object().shape({
     .required("Phone number is required"),
 });
 
-const ContactForm = () => {
-  // Використання useState для зберігання контактів
-  const [contacts, setContacts] = useState([]);
-
+const ContactForm = ({ contacts, setContacts }) => {
   const initialValues = {
     username: "",
     phoneNum: "",
   };
 
-  // Функція для додавання контакту
   const handleSubmit = (values, options) => {
-    const newContact = { ...values, id: nanoid() };
-
-    // Оновлюємо стан
-    setContacts([...contacts, newContact]);
-
-    // Скидаємо форму після додавання контакту
-    options.resetForm();
+    const newContact = {id: nanoid(), contactName:values.username, number:values.phoneNum};
+       setContacts([...contacts, newContact]);
+   options.resetForm();
   };
 
-  // Функція для видалення контакту
-  const handleDelete = (id) => {
-    const updatedContacts = contacts.filter((contact) => contact.id !== id);
-    setContacts(updatedContacts);
-  };
-
-  return (
+    return (
     <div className={styles.formWrapper}>
       <Formik
         initialValues={initialValues}
@@ -86,15 +70,7 @@ const ContactForm = () => {
         </Form>
       </Formik>
 
-      {/* Відображення списку контактів */}
-      <ul>
-        {contacts.map((contact) => (
-          <li key={contact.id}>
-            {contact.username}: {contact.phoneNum}
-            <button onClick={() => handleDelete(contact.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+        
     </div>
   );
 };

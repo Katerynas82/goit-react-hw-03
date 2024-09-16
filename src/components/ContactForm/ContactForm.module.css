@@ -1,11 +1,7 @@
 body{
     background-color: #c9fac4;
 }
- /* .formWrapper{
-  min-height: 100vh;
-  display: grid;
-  
-}  */
+
 .form{
   display: flex;
   border-radius: 12px;
