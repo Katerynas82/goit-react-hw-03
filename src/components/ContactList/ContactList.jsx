@@ -1,14 +1,9 @@
 import Contact from "../Contact/Contact";
 
 
-const ContactList = ({ contacts, setContacts }) => {
+const ContactList = ({ contacts, handleDelete }) => {
   
-  const handleDelete = (id) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== id)
-    );
-    console.log(contacts);
-  };
+  
   return (
     <>
       <ul>

@@ -52,14 +52,19 @@ import { nanoid } from "nanoid";
   };
    const filteredContacts = contacts.filter((contact) =>
     contact.contactName.toLowerCase().includes(filter.toLowerCase()));
-  
+  const handleDelete = (id) => {
+    setContacts((prevContacts) =>
+      prevContacts.filter((contact) => contact.id !== id)
+    );
+    console.log(contacts);
+  };
 
   return (
     <div>
       <h1>Phonebook</h1>
       <ContactForm contacts={contacts} setContacts={setContacts} />
       <SearchBox filter={filter} onFilterChange={handleChange} />
-      <ContactList contacts={filteredContacts} setContacts={setContacts} />
+      <ContactList contacts={filteredContacts}  handleDelete={handleDelete} />
     </div>
   );
 };
